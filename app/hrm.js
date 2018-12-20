@@ -2,14 +2,16 @@ import { me } from "appbit";
 import document from "document";
 import { HeartRateSensor } from "heart-rate";
 import { display } from "display";
+import { BodyPresenceSensor } from "body-presence";
 
-let hrm, checkInterval;
+let hrm, checkInterval, bps;
 
 let heartText = document.getElementById("hrm-data");
 
 export function initialize() {
   if (me.permissions.granted("access_heart_rate")) {
     hrm = new HeartRateSensor();
+    bps = new BodyPresenceSensor();
     heartRateSetup();
     startReading();
   } else {
@@ -19,7 +21,11 @@ export function initialize() {
 }
 
 function getReading() {
-  heartText.text = hrm.heartRate ? hrm.heartRate : 0;
+  const value = 0;
+  if (bps.present) {
+     value = hrm.heartRate ? hrm.heartRate : 0;
+  }
+  heartText.text = value;
 }
 
 function heartRateSetup() {
@@ -35,6 +41,7 @@ function heartRateSetup() {
 function startReading() {
   if (!checkInterval) {
     hrm.start();
+    bps.start();
     getReading();
     checkInterval = setInterval(getReading, 1000);
   }
@@ -42,6 +49,7 @@ function startReading() {
 
 function stopReading() {
   hrm.stop();
+  bps.stop();
   clearInterval(checkInterval);
   checkInterval = null;
 }
