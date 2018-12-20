@@ -4,8 +4,8 @@ import userActivity from "user-activity";
 import { display } from "display";
 import { preferences } from "user-settings";
 import { HeartRateSensor } from "heart-rate";
-import * as battery from "battery";
-import * as heartMonitor from "hrm";
+import * as battery from "./battery";
+import * as heartMonitor from "./hrm";
 import * as util from "../common/utils";
 
 // Set up all necessary variables
